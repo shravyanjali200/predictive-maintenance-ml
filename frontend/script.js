@@ -41,7 +41,7 @@ predictBtn.addEventListener("click", async function () {
 
 
         const response = await fetch(
-            "http://127.0.0.1:8000/predict",
+            "https://predictive-maintenance-ml-kem2.onrender.com/predict",
             {
                 method: "POST",
 
