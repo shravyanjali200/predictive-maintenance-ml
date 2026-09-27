@@ -3,222 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-powered industrial machine failure prediction with risk assessment, feature importance, history, and batch CSV analysis.">
 
     <title>Predictive Maintenance AI</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+<div class="container">
 
-    <div class="container">
+    <!-- ════════════════════════════════════════
+         HEADER
+    ════════════════════════════════════════ -->
+    <header>
+        <div>
+            <p class="tag">AI-POWERED INDUSTRIAL MONITORING</p>
+            <h1>Predictive Maintenance</h1>
+            <p class="subtitle">Detect potential machine failures before they happen.</p>
+        </div>
+        <div class="status">
+            <span></span>
+            Model Online
+        </div>
+    </header>
 
-        <header>
-            <div>
-                <p class="tag">AI-POWERED INDUSTRIAL MONITORING</p>
-                <h1>Predictive Maintenance</h1>
-                <p class="subtitle">
-                    Detect potential machine failures before they happen.
-                </p>
-            </div>
+    <!-- ════════════════════════════════════════
+         DASHBOARD STATISTICS  (always visible)
+    ════════════════════════════════════════ -->
+    <section class="stats-row">
+        <div class="stat-card">
+            <p class="stat-label">Total Predictions</p>
+            <p class="stat-value" id="statTotal">—</p>
+        </div>
+        <div class="stat-card low">
+            <p class="stat-label">Low Risk</p>
+            <p class="stat-value" id="statLow">—</p>
+        </div>
+        <div class="stat-card medium">
+            <p class="stat-label">Medium Risk</p>
+            <p class="stat-value" id="statMedium">—</p>
+        </div>
+        <div class="stat-card high">
+            <p class="stat-label">High Risk</p>
+            <p class="stat-value" id="statHigh">—</p>
+        </div>
+    </section>
 
-            <div class="status">
-                <span></span>
-                Model Online
-            </div>
-        </header>
+    <!-- ════════════════════════════════════════
+         TAB NAVIGATION
+    ════════════════════════════════════════ -->
+    <nav class="tab-nav">
+        <button class="tab-btn active" data-tab="predict">⚡ Single Prediction</button>
+        <button class="tab-btn"        data-tab="history">🕓 History</button>
+        <button class="tab-btn"        data-tab="batch"  >📁 Batch CSV</button>
+    </nav>
 
+    <!-- ════════════════════════════════════════
+         TAB 1 — SINGLE PREDICTION
+    ════════════════════════════════════════ -->
+    <section class="tab-content active" id="tab-predict">
 
-        <section class="dashboard">
+        <!-- Error banner -->
+        <div id="predictError" class="error-box hidden"></div>
 
-            <!-- INPUT SECTION -->
+        <div class="dashboard">
 
+            <!-- INPUT CARD -->
             <div class="card input-card">
-
                 <h2>Machine Sensor Data</h2>
-                <p class="description">
-                    Enter the current machine sensor readings.
-                </p>
+                <p class="description">Enter the current machine sensor readings.</p>
 
                 <div class="form-grid">
-
                     <div class="input-group">
-                        <label>Air Temperature</label>
+                        <label for="air_temperature">Air Temperature</label>
                         <div class="input-wrapper">
-                            <input
-                                type="number"
-                                id="air_temperature"
-                                value="300"
-                                step="0.1"
-                            >
+                            <input type="number" id="air_temperature" value="300" step="0.1">
                             <span>K</span>
                         </div>
                     </div>
-
-
                     <div class="input-group">
-                        <label>Process Temperature</label>
+                        <label for="process_temperature">Process Temperature</label>
                         <div class="input-wrapper">
-                            <input
-                                type="number"
-                                id="process_temperature"
-                                value="310"
-                                step="0.1"
-                            >
+                            <input type="number" id="process_temperature" value="310" step="0.1">
                             <span>K</span>
                         </div>
                     </div>
-
-
                     <div class="input-group">
-                        <label>Rotational Speed</label>
+                        <label for="rotational_speed">Rotational Speed</label>
                         <div class="input-wrapper">
-                            <input
-                                type="number"
-                                id="rotational_speed"
-                                value="1500"
-                            >
+                            <input type="number" id="rotational_speed" value="1500">
                             <span>rpm</span>
                         </div>
                     </div>
-
-
                     <div class="input-group">
-                        <label>Torque</label>
+                        <label for="torque">Torque</label>
                         <div class="input-wrapper">
-                            <input
-                                type="number"
-                                id="torque"
-                                value="50"
-                                step="0.1"
-                            >
+                            <input type="number" id="torque" value="50" step="0.1">
                             <span>Nm</span>
                         </div>
                     </div>
-
-
                     <div class="input-group full">
-                        <label>Tool Wear</label>
+                        <label for="tool_wear">Tool Wear</label>
                         <div class="input-wrapper">
-                            <input
-                                type="number"
-                                id="tool_wear"
-                                value="140"
-                            >
+                            <input type="number" id="tool_wear" value="140">
                             <span>min</span>
                         </div>
                     </div>
-
                 </div>
 
-
-                <button id="predictBtn">
-                    Analyze Machine
-                </button>
-
+                <button id="predictBtn">Analyze Machine</button>
             </div>
 
-
-            <!-- RESULT SECTION -->
-
+            <!-- RESULT CARD -->
             <div class="card result-card">
-
                 <h2>Prediction Result</h2>
 
                 <div id="resultBox" class="result-box normal">
-
-                    <div class="result-icon" id="resultIcon">
-                        ✓
-                    </div>
-
+                    <div class="result-icon" id="resultIcon">✓</div>
                     <div>
                         <p class="result-label">CURRENT STATUS</p>
-
-                        <h3 id="resultText">
-                            Waiting for analysis
-                        </h3>
-
-                        <p id="recommendation">
-                            Enter sensor values and analyze the machine.
-                        </p>
+                        <h3 id="resultText">Waiting for analysis</h3>
+                        <p id="recommendation">Enter sensor values and analyze the machine.</p>
                     </div>
-
                 </div>
 
+                <!-- Risk level badge -->
+                <div class="risk-badge-row">
+                    <span class="risk-badge neutral" id="riskBadge">—</span>
+                </div>
 
+                <!-- Failure probability -->
                 <div class="probability-section">
-
                     <div class="probability-header">
                         <span>Failure Probability</span>
-
-                        <strong id="probability">
-                            0%
-                        </strong>
+                        <strong id="probability">0%</strong>
                     </div>
-
                     <div class="progress">
-                        <div
-                            id="progressBar"
-                            class="progress-bar"
-                            style="width: 0%"
-                        ></div>
+                        <div id="progressBar" class="progress-bar" style="width: 0%"></div>
                     </div>
-
                 </div>
 
-
+                <!-- Sensor summary tiles -->
                 <div class="sensor-summary">
-
                     <h3>Sensor Summary</h3>
-
                     <div class="summary-grid">
-
-                        <div>
-                            <span>Air Temp.</span>
-                            <strong id="summaryAir">—</strong>
-                        </div>
-
-                        <div>
-                            <span>Process Temp.</span>
-                            <strong id="summaryProcess">—</strong>
-                        </div>
-
-                        <div>
-                            <span>Speed</span>
-                            <strong id="summarySpeed">—</strong>
-                        </div>
-
-                        <div>
-                            <span>Torque</span>
-                            <strong id="summaryTorque">—</strong>
-                        </div>
-
-                        <div>
-                            <span>Tool Wear</span>
-                            <strong id="summaryWear">—</strong>
-                        </div>
-
+                        <div><span>Air Temp.</span>    <strong id="summaryAir">—</strong></div>
+                        <div><span>Process Temp.</span> <strong id="summaryProcess">—</strong></div>
+                        <div><span>Speed</span>         <strong id="summarySpeed">—</strong></div>
+                        <div><span>Torque</span>        <strong id="summaryTorque">—</strong></div>
+                        <div><span>Tool Wear</span>     <strong id="summaryWear">—</strong></div>
                     </div>
-
                 </div>
+            </div>
+        </div>
 
+        <!-- FEATURE IMPORTANCE CARD (full width) -->
+        <div class="card importance-card">
+            <h2>Feature Importance</h2>
+            <p class="description">
+                Contribution of each sensor to the model's failure predictions (Random Forest).
+            </p>
+            <div id="importanceChart" class="importance-chart">
+                <p class="empty-state">Run a prediction to see feature importance.</p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ════════════════════════════════════════
+         TAB 2 — PREDICTION HISTORY
+    ════════════════════════════════════════ -->
+    <section class="tab-content" id="tab-history">
+        <div class="card">
+            <div class="section-header">
+                <div>
+                    <h2>Prediction History</h2>
+                    <p class="description">Recent predictions, newest first.</p>
+                </div>
+                <div class="header-actions">
+                    <select id="historyLimit" class="select-input">
+                        <option value="10">Last 10</option>
+                        <option value="25" selected>Last 25</option>
+                        <option value="50">Last 50</option>
+                        <option value="100">Last 100</option>
+                    </select>
+                    <button class="btn-secondary" id="refreshHistory">↻ Refresh</button>
+                </div>
             </div>
 
-        </section>
+            <div id="historyError"   class="error-box hidden"></div>
+            <div id="historyLoading" class="loading-state hidden">Loading history…</div>
+            <div id="historyContainer">
+                <p class="empty-state">No predictions yet. Run a prediction to get started.</p>
+            </div>
+        </div>
+    </section>
 
+    <!-- ════════════════════════════════════════
+         TAB 3 — BATCH CSV
+    ════════════════════════════════════════ -->
+    <section class="tab-content" id="tab-batch">
+        <div class="card">
+            <div class="section-header">
+                <div>
+                    <h2>Batch CSV Prediction</h2>
+                    <p class="description">Upload a CSV to predict multiple machines at once.</p>
+                </div>
+                <button class="btn-secondary" id="downloadTemplate">⬇ Download Template</button>
+            </div>
 
-        <footer>
-            <p>
-                Predictive Maintenance &nbsp;•&nbsp;
-                Machine Learning &nbsp;•&nbsp;
-                Random Forest
-            </p>
-        </footer>
+            <div id="batchError" class="error-box hidden"></div>
 
-    </div>
+            <!-- File upload area — wrapping label triggers file input on click -->
+            <label for="csvFile" class="upload-area" id="uploadArea">
+                <div class="upload-icon">📂</div>
+                <p class="upload-label">Click to select or drag &amp; drop a CSV file</p>
+                <p class="upload-sub">
+                    Required columns: Air temperature [K] · Process temperature [K] ·
+                    Rotational speed [rpm] · Torque [Nm] · Tool wear [min]
+                </p>
+                <input type="file" id="csvFile" accept=".csv" class="file-input">
+            </label>
 
+            <p id="selectedFile" class="selected-file hidden"></p>
 
-    <script src="script.js"></script>
+            <button id="uploadBtn" class="btn-primary" disabled>Upload &amp; Predict</button>
 
+            <!-- Batch results (shown after upload) -->
+            <div id="batchResultsSection" class="hidden">
+                <div class="section-header results-header">
+                    <h3 class="results-title">Batch Results</h3>
+                    <button class="btn-secondary" id="downloadResults">⬇ Download Results CSV</button>
+                </div>
+                <div id="batchSummary"></div>
+                <div id="batchContainer"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>Predictive Maintenance &nbsp;•&nbsp; Machine Learning &nbsp;•&nbsp; Random Forest &nbsp;•&nbsp; v2.0</p>
+    </footer>
+
+</div>
+<script src="script.js"></script>
 </body>
 </html>

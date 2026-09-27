@@ -1,0 +1,56 @@
+{
+  "model_name": "Improved Random Forest",
+  "model_file": "C:\\Users\\peddi\\OneDrive\\Documents\\GitHub\\predictive-maintenance-ml\\predictive-maintenance-ml-2\\models\\improved_random_forest_model.pkl",
+  "training_config": {
+    "cv_strategy": "StratifiedKFold(n_splits=5, shuffle=True, random_state=42)",
+    "search_strategy": "RandomizedSearchCV(n_iter=30)",
+    "scoring_metric": "f1_macro",
+    "scoring_rationale": "f1_macro averages F1 equally across both classes. Plain accuracy is misleading at ~3.4% positive rate. f1_macro forces the model to handle the minority failure class well.",
+    "class_imbalance": "class_weight tuned in search (balanced / balanced_subsample)",
+    "train_samples": 8000,
+    "test_samples": 2000
+  },
+  "best_hyperparameters": {
+    "n_estimators": 200,
+    "min_samples_split": 2,
+    "min_samples_leaf": 4,
+    "max_features": "log2",
+    "max_depth": 30,
+    "class_weight": "balanced_subsample"
+  },
+  "best_cv_f1_macro": 0.8419,
+  "selected_threshold": 0.49,
+  "threshold_method": "Maximise F1 on out-of-fold CV predictions (training data only)",
+  "feature_names": [
+    "Air temperature [K]",
+    "Process temperature [K]",
+    "Rotational speed [rpm]",
+    "Torque [Nm]",
+    "Tool wear [min]"
+  ],
+  "baseline_rf_metrics": {
+    "Accuracy": 0.9815,
+    "Precision": 0.7313,
+    "Recall": 0.7206,
+    "F1": 0.7259,
+    "ROC-AUC": 0.9678
+  },
+  "improved_rf_metrics": {
+    "Accuracy": 0.9805,
+    "Precision": 0.6835,
+    "Recall": 0.7941,
+    "F1": 0.7347,
+    "ROC-AUC": 0.9657
+  },
+  "confusion_matrix_improved": [
+    [
+      1907,
+      25
+    ],
+    [
+      14,
+      54
+    ]
+  ],
+  "recommendation": "REPLACE"
+}
